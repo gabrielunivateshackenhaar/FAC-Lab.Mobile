@@ -12,7 +12,9 @@ const envSchema = z.object({
   JWT_EXPIRES_IN: z.string().default('15m'),
   REFRESH_TOKEN_SECRET: z.string().min(16, 'REFRESH_TOKEN_SECRET deve conter ao menos 16 caracteres'),
   REFRESH_TOKEN_EXPIRES_IN: z.string().default('7d'),
-  FILES_DIR: z.string().default('./files')
+  FILES_DIR: z.string().default('./files'),
+  ADMIN_DEFAULT_EMAIL: z.string().email().default('admin@facgaribaldi.org.br'),
+  ADMIN_DEFAULT_PASSWORD: z.string().min(6).default('Admin@123456')
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
