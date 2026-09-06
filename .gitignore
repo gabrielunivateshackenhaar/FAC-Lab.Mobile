@@ -9,9 +9,8 @@ build/
 out/
 *.tsbuildinfo
 
-# Arquivos de upload locais
+# Arquivos locais
 files/
-uploads/
 
 # Variáveis de ambiente e segredos
 .env
