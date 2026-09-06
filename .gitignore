@@ -36,6 +36,7 @@ pnpm-debug.log*
 # Sistema Operacional e IDEs
 .DS_Store
 Thumbs.db
+.vscode/
 .idea/
 *.suo
 *.ntvs*
