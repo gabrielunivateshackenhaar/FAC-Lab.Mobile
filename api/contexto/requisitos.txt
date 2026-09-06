@@ -1,0 +1,34 @@
+Cadastro digital de crianças
+[  ] Dados pessoais gerais
+[  ] Dados dos responsáveis (nome, contato, local de trabalho, contato do local de trabalho)
+[  ] Permanecer os dados de alunos que nao frequentam mais
+[  ] Histórico/observações sobre a situação da criança (menos relevante) 
+[  ] Cadastro do responsavel (email)
+O que o responsavel acessa: matricula, rematricula, calendario
+
+
+Pré-inscrição
+-> ela é feita no app/site, ver metodo de inscricao unica que nao seja replicavel para evitar spam, 
+-> Dados essenciais,
+-> Após o responsavel vem na unidade para confirmar (elas vao pensar em algo pois existe a contribuicao, nao pode ser pix, é mais em dinheiro)
+
+Inscricao, fica por 1 ano
+-> Comp residencia, comp renda responsaveis, doc responsaveis, doc criança, foto criança 3x4, termo autoriza imagem/voz, normas de ciencia da entidade. (Termo e norma daqui a pouco sera assinado presencialmente por conta da contribuicao)
+-> Depois de aprovado é matriculado
+
+Rematricula, 2 dias para fazer (o responsavel precisa vir presencialmente por causa da contribuicao)
+-> Informar se foi alterado algo, 
+-> Administrador aprova
+
+
+[  ] Upload de documentos (RG, comprovante de residência etc.)
+[  ] Busca e filtro de cadastros (nome, idade, etc.)
+[  ] Controle de acesso aos dados (dados sensíveis de menores)
+[  ] Histórico de alterações (quem mexeu no quê)
+
+Calendario
+[  ] Criação de eventos (data, horário, local, descrição)
+[  ] Categorização (evento pontual x atividade recorrente) (ver se relevante)
+[  ] Notificações/lembretes para a equipe
+[  ] Visualização em calendário (mensal/semanal)
+[  ] Confirmacao de presença
