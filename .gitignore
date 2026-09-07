@@ -10,7 +10,6 @@ out/
 *.tsbuildinfo
 
 # Arquivos locais (criados sob demanda)
-files/
 api/files/
 
 # Variáveis de ambiente e segredos
