@@ -72,6 +72,7 @@ A conexão com o banco opera no modo de desempenho máximo com os seguintes `PRA
 ```
 api/
 ├── AGENTS.md                  # Especificações técnicas e diretrizes do backend
+├── files/                     # Arquivos locais de upload (documentos, fotos)
 ├── contexto/                  # Documentos originais de domínio, fichas e escopo
 ├── database/
 │   └── schema.sql             # Definição completa da DDL em SQLite
