@@ -1,109 +1,78 @@
-# Apresentação da Sprint 1 — Backend da Plataforma FAC Garibaldi
+# Apresentação da Sprint 1 — Arquitetura, Segurança e Modelagem do Backend
 
-Documento síntese com o andamento do projeto, decisões arquiteturais, modelagem de dados e validações técnicas para a apresentação da Sprint 1.
-
----
-
-## 1. Visão Geral e Entregas da Sprint 1
-
-- **Vinculação e Estruturação do Repositório**:
-  - Repositório remoto integrado ao GitHub sob a branch `main`.
-  - Estruturação modular com isolamento exclusivo do backend dentro do diretório `api/`.
-  - Configuração de políticas de exclusão (`.gitignore`) para credenciais, variáveis de ambiente, binários SQLite e arquivos locais.
-- **Fundação do Backend**:
-  - Configuração completa do runtime Node.js LTS com TypeScript em modo estrito (`ES2022`).
-  - Criação do pipeline de compilação e scripts operacionais (`dev`, `build`, `start`, `test`).
-- **Mecanismo de Autenticação e Segurança**:
-  - Autenticação stateless com Access Tokens JWT (curta duração: 15 minutos).
-  - Mecanismo de renovação automática via Refresh Tokens rotacionáveis (validade: 7 dias) persistidos no banco.
-  - Criptografia irreversível de senhas com algoritmo `bcrypt`.
-  - Controle de acesso baseado em papéis (RBAC): `ADMINISTRADOR`, `COLABORADOR` e `RESPONSAVEL`.
-  - Endpoint de auto-cadastro de responsáveis (`POST /auth/registro-responsavel`) com transação atômica.
-- **Trilha de Auditoria (Conformidade LGPD)**:
-  - Registro sistemático de ações sensíveis (`CRIAR`, `ATUALIZAR`, `EXCLUIR`, `VISUALIZAR_SENSIVEL`) na tabela `logs_auditoria`.
-  - Rastreabilidade com captura de endereço IP, identificador de usuário, recurso e payload do evento.
-- **Garantia de Qualidade e Testes**:
-  - Suíte de testes automatizados ponta a ponta (E2E) com 16 cenários validados (100% de aprovação).
+Síntese executiva das decisões de arquitetura, estratégia de hospedagem, segurança e modelagem de dados da plataforma para a instituição filantrópica **Fraterno Auxílio Cristão (FAC)** de Garibaldi - RS.
 
 ---
 
-## 2. Decisões Arquiteturais e Padrões Adotados
+## 1. Propósito e Papel do Backend
 
-- **Arquitetura em Camadas (Clean Architecture / Separation of Concerns)**:
-  - `config/`: Configurações de ambiente validadas em runtime e singleton de infraestrutura.
-  - `core/`: Tipagens globais do domínio e hierarquia semântica de classes de erro.
-  - `middlewares/`: Autenticação JWT, autorização RBAC, validação de contrato e manipulador global de exceções.
-  - `modules/`: Módulos coesos organizados por domínio de negócio (ex: `auth`, `auditoria`, `health`).
-- **Premissa de Infraestrutura de Custo Zero**:
-  - Aplicação desenvolvida para operação em modelo *self-hosting* sem custos recorrentes de servidores ou bancos em nuvem.
-  - Exposição segura para o aplicativo mobile e web por meio de **Cloudflare Tunnel** (HTTPS ponta a ponta sem necessidade de IP público estático).
-- **Padrão de Respostas HTTP (REST Direto - KISS)**:
-  - Respostas de sucesso retornam diretamente a entidade ou lista correspondente com códigos de status HTTP semânticos (200, 201, 204), eliminando envelopamento redundante para clientes mobile.
-  - Respostas de erro padronizadas em estrutura única (`codigo`, `mensagem`, `detalhes`), facilitando o mapeamento de campos inválidos nas telas do aplicativo.
-- **Validação Estrita de Contratos em Tempo de Execução**:
-  - Utilização do **Zod** para validação estática e em runtime de todas as variáveis de ambiente (`env.ts`) e payloads HTTP (`schemas.ts`).
+- **Centralização da Regra de Negócio**:
+  - Servir como o núcleo seguro de dados e lógica operacional para alimentar os aplicativos mobile e painéis web.
+  - Digitalizar processos operacionais manuais (fichas físicas de papel, controle manual de presença em oficinas e pré-inscrições anuais).
+- **Atendimento Institucional**:
+  - Plataforma projetada para atender cerca de 150 crianças e adolescentes (5 a 14 anos) em situação de vulnerabilidade nas unidades Glória, São Francisco e São Pedro.
 
 ---
 
-## 3. Estratégia e Engenharia do Banco de Dados (SQLite)
+## 2. Estratégia de Hospedagem e Infraestrutura (Custo Zero)
 
-- **Driver Utilizado**:
-  - `better-sqlite3`: Driver síncrono em C para Node.js, oferecendo a mais alta taxa de throughput e latência na ordem de microssegundos em acessos locais.
-- **Modo de Operação WAL (Write-Ahead Logging)**:
-  - Ativação de `PRAGMA journal_mode = WAL`: permite leituras concorrentes simultâneas sem bloqueio por operações de escrita, essencial para múltiplas requisições simultâneas de usuários e responsáveis.
-- **Configuração de Desempenho e Integridade (PRAGMAs)**:
-  - `PRAGMA foreign_keys = ON`: Garantia rígida de integridade referencial entre entidades relacionais.
-  - `PRAGMA synchronous = NORMAL`: Equilíbrio ótimo entre durabilidade e taxa de transferência de I/O em disco.
-  - `PRAGMA busy_timeout = 5000`: Tratamento automático de espera ativa contra exceções de contenção de escrita (`SQLITE_BUSY`).
-  - `PRAGMA cache_size = -64000`: Alocação dedicada de 64 MB de memória RAM para cache de páginas do banco.
-  - `PRAGMA temp_store = MEMORY`: Execução de ordenações e tabelas temporárias exclusivamente em RAM.
-- **Bootstrap e Inicialização Automática**:
-  - Execução idempotente do arquivo `database/schema.sql` na inicialização do servidor.
-  - Seed automático do usuário administrador inicial (`admin@facgaribaldi.org.br`) caso o banco seja criado do zero.
-- **Portabilidade e Backup**:
-  - Banco contido em arquivo único local (`database/fac_garibaldi.db`), viabilizando rotinas simples de backup periódico sem necessidade de serviços de gerenciamento de terceiros.
+- **Viabilidade para o Terceiro Setor**:
+  - A premissa central de infraestrutura é a **isenção total de custos recorrentes em nuvem** (como servidores AWS, Azure ou bancos gerenciados), tornando a solução sustentável para a instituição a longo prazo.
+- **Modelo de Operação Local (*Self-Hosting*)**:
+  - Execução da aplicação e do banco de dados em hardware local próprio disponibilizado pela entidade.
+- **Exposição Segura via Cloudflare Tunnel**:
+  - **Túnel Criptografado de Saída**: Conecta o servidor local diretamente à rede da Cloudflare sem necessidade de abrir portas no roteador (NAT) e sem IP público estático.
+  - **HTTPS de Ponta a Ponta**: Certificados SSL/TLS geridos automaticamente com proteção contra ataques de negação de serviço (DDoS).
+  - **Consumo Mobile Transparente**: Os aplicativos dos usuários e colaboradores comunicam-se de forma segura via HTTPS institucional sob um domínio padronizado.
 
 ---
 
-## 4. Política de Armazenamento de Arquivos (`files/`)
+## 3. Arquitetura de Segurança e Privacidade (Conformidade LGPD)
 
-- **Armazenamento Local Estruturado**:
-  - Diretório `api/files/` configurado na raiz do backend, com criação automática na inicialização e ignorado pelo controle de versão.
-  - Separação planejada para documentos comprobatórios (certidões, comprovantes de residência e renda) e fotos 3x4 dos alunos.
-- **Limites de Proteção**:
-  - Teto de **20 MB** para documentos em formato PDF.
-  - Teto de **10 MB** para imagens (JPEG/PNG).
-
----
-
-## 5. Resultados dos Testes Automatizados da Sprint 1
-
-Execução da suíte completa de testes via comando `npm test`:
-
-| Caso de Teste | Rota / Operação | Status Esperado | Status Obtido | Resultado |
-| :--- | :--- | :---: | :---: | :---: |
-| 1. Integridade da API | `GET /health` | 200 | 200 | Aprovado |
-| 2. Autenticação Válida | `POST /auth/login` | 200 | 200 | Aprovado |
-| 3. Senha Incorreta | `POST /auth/login` | 401 | 401 | Aprovado |
-| 4. Validação de Email/Senha | `POST /auth/login` | 400 | 400 | Aprovado |
-| 5. Perfil Autenticado | `GET /auth/me` | 200 | 200 | Aprovado |
-| 6. Ausência de Token | `GET /auth/me` | 401 | 401 | Aprovado |
-| 7. Token Adulterado | `GET /auth/me` | 401 | 401 | Aprovado |
-| 8. Renovação de Token | `POST /auth/refresh` | 200 | 200 | Aprovado |
-| 9. Reuso de Token Consumido | `POST /auth/refresh` | 401 | 401 | Aprovado |
-| 10. Cadastro de Responsável | `POST /auth/registro-responsavel` | 201 | 201 | Aprovado |
-| 11. Conflito por Email/CPF | `POST /auth/registro-responsavel` | 409 | 409 | Aprovado |
-| 12. Perfil com Dados de Responsável | `GET /auth/me` | 200 | 200 | Aprovado |
-| 13. Revogação de Sessão (Logout) | `POST /auth/logout` | 204 | 204 | Aprovado |
-| 14. Refresh Pós-Logout | `POST /auth/refresh` | 401 | 401 | Aprovado |
-| 15. Rota Não Encontrada | `GET /rota-inexistente` | 404 | 404 | Aprovado |
-| 16. Verificação de Auditoria | Consulta SQLite em `logs_auditoria` | 8 logs | 8 logs | Aprovado |
+- **Proteção Rigorosa de Dados de Menores**:
+  - Por envolver dados altamente sensíveis de crianças e adolescentes (saúde, moradia, vulnerabilidade sociofamiliar e registros civis), a arquitetura prioriza o princípio de privilégio mínimo e isolamento de acessos.
+- **Autenticação em Dois Níveis (Stateless JWT + Refresh Token)**:
+  - **Access Token de Curta Duração (15 minutos)**: Minimiza a janela de vulnerabilidade em caso de interceptação de tráfego.
+  - **Refresh Token Seguro com Rotação**: Permite que o aplicativo mobile renove automaticamente a sessão em segundo plano, garantindo usabilidade contínua aos pais sem abrir mão da segurança.
+  - **Revogação Instantânea**: Mecanismo que invalida sessões imediatamente em caso de logout ou detecção de anomalias.
+- **Controle de Acesso Baseado em Papéis (RBAC)**:
+  - **Administrador**: Gestão de colaboradores, aprovação formal de matrículas, controle de vagas e acesso a auditorias.
+  - **Colaborador (Educadores/Pedagogos)**: Consulta operacional de turmas, planejamento de oficinas e registro diário de presenças.
+  - **Responsável (Pais/Tutores)**: Acesso estritamente restrito aos seus próprios dependentes (solicitação de matrícula, rematrícula, upload de comprovantes e acompanhamento de agenda).
+- **Trilha de Auditoria Obrigatória**:
+  - Registro sistemático e imutável de qualquer ação de criação, edição, exclusão ou visualização de dados sensíveis na tabela de auditoria, registrando o autor, o recurso afetado, o endereço IP e a data/hora exata do evento.
+- **Criptografia de Credenciais**:
+  - Armazenamento de senhas protegido por hashing irreversível com algoritmo `bcrypt` e salt dinâmico.
 
 ---
 
-## 6. Próximos Passos (Planejamento para a Sprint 2)
+## 4. Modelagem de Dados e Modelo de Objetos
 
-- **Módulo de Unidades e Turmas**: Cadastro das unidades Glória, São Francisco e São Pedro e enturmação por turno.
-- **Módulo de Alunos**: Fichas digitais completas de crianças/adolescentes com vínculos parentais e controle de privacidade.
-- **Módulo de Matrículas e Inscrições**: Fluxo de pré-inscrição, análise documental presencial e rematrícula anual.
-- **Módulo de Agenda e Frequência**: Calendário de eventos institucionais, oficinas diárias e chamadas de presença.
+O domínio da plataforma foi modelado de forma relacional para garantir consistência cadastral e integridade referencial:
+
+- **Módulo Institucional e Acessos**:
+  - **Unidades**: Mapeamento das unidades físicas da FAC (Glória, São Francisco e São Pedro) para segmentação territorial das vagas e atendimentos.
+  - **Usuários e Responsáveis**: Separação clara entre a credencial de acesso ao sistema (email/senha) e os atributos civis/profissionais do responsável familiar (CPF, RG, locais de trabalho e telefones de emergência).
+- **Módulo de Alunos e Família**:
+  - **Alunos**: Registro detalhado da criança/adolescente, compreendendo dados de identificação, histórico de saúde, escola regular de origem, situação de moradia e dados socioeconômicos.
+  - **Alunos_Responsáveis (Vínculo Familiar)**: Associação flexível de múltiplos responsáveis por aluno, com indicação explícita do contato familiar prioritário.
+- **Módulo de Matrículas e Documentos**:
+  - **Matrículas**: Ciclo de vida da vaga dividido por ano letivo e estados bem definidos (`Pré-inscrição`, `Pendente Presencial`, `Aprovada`, `Cancelada`).
+  - **Documentos**: Repositório de arquivos comprobatórios exigidos no processo (certidão de nascimento, comprovante de residência, holerite e termo de autorização de imagem e voz).
+- **Módulo Pedagógico e Atendimentos**:
+  - **Turmas e Enturmação**: Agrupamento por ano letivo e turnos de atendimento (manhã, tarde ou integral) no contraturno escolar.
+  - **Eventos de Agenda**: Planejamento de oficinas socioeducativas, reuniões de pais e atendimentos individuais multidisciplinares, com suporte a atividades recorrentes.
+  - **Presenças**: Registro nominal diário de frequência com histórico de presenças e justificativas de faltas.
+
+---
+
+## 5. Engenharia do Banco de Dados (SQLite Otimizado)
+
+- **Portabilidade e Facilidade Operacional**:
+  - Banco de dados relacional embarcado em arquivo único local, sem a sobrecarga de gerenciar processos complexos de bancos de dados externos.
+  - Facilidade de rotinas de backup instantâneo e recuperação de desastres (cópia íntegra de arquivo).
+- **Concorrência com Modo WAL (Write-Ahead Logging)**:
+  - Permite que múltiplos usuários realizem leituras simultâneas no aplicativo sem serem bloqueados por operações de escrita no banco de dados.
+- **Integridade e Desempenho**:
+  - Ativação obrigatória de integridade referencial em nível de motor (`foreign_keys = ON`), impedindo dados órfãos ou inconsistências entre alunos e matrículas.
+  - Alocação dedicada de memória RAM para cache e processamento de tabelas temporárias, garantindo respostas em milissegundos mesmo em hardware modesto.
