@@ -1,6 +1,26 @@
 # Apresentação da Sprint 1 — Arquitetura, Segurança e Modelagem do Backend
+> **Projeto de Extensão Universitária em Engenharia de Software — Plataforma FAC Garibaldi**
 
-Síntese executiva das decisões de arquitetura, estratégia de hospedagem, segurança e modelagem de dados da plataforma para a instituição filantrópica **Fraterno Auxílio Cristão (FAC)** de Garibaldi - RS.
+---
+
+## 0. Contexto Acadêmico e Diretrizes para Apresentação (Google Slides)
+
+> **Orientações para o Agente / Geração de Slides**: Utilize este bloco como base para estruturar slides minimalistas, sóbrios e de alto impacto visual.
+
+### Contexto do Projeto de Estudos:
+- **Disciplina / Curso**: Projeto de Extensão Universitária em Engenharia de Software.
+- **Instituição Beneficiada**: **Fraterno Auxílio Cristão (FAC)** de Garibaldi - RS, entidade filantrópica fundada em 1943 (declarada de Utilidade Pública Municipal pela Lei nº 1145/1972).
+- **Impacto Social**: Atendimento socioassistencial e pedagógico no contraturno escolar a cerca de 150 crianças e adolescentes (5 a 14 anos) em situação de vulnerabilidade nas unidades Glória, São Francisco e São Pedro.
+- **Problema Real Endereçado**: Transição de processos 100% analógicos (fichas físicas de matrícula, controle manual de frequência em oficinas e arquivos em papel) para um ecossistema digital seguro, integrado a aplicativo mobile e painéis de gestão.
+- **Premissa de Engenharia**: Sustentabilidade financeira total — a arquitetura deve operar com **custo zero de infraestrutura em nuvem**, viabilizando a manutenção autônoma pela entidade sem fins lucrativos.
+
+### Diretrizes de Design Minimalista para os Slides:
+- **Estilo Visual**: Minimalista, limpo, elegante e direto ao ponto. Priorizar espaços em branco para leitura fluida.
+- **Carga Cognitiva Reduzida**: No máximo **3 a 4 tópicos curtos** por slide. Evitar blocos densos de texto.
+- **Âncoras Visuais**: Uso estratégico de termos em **negrito** no início de cada ponto para conduzir a narrativa do apresentador.
+- **Paleta de Cores**: Fundo claro (branco ou cinza suave), textos em cinza-chumbo e detalhes sutis em azul sóbrio (institucional/tecnologia).
+- **Diagramação**: Preferir tópicos espaçados e cards conceituais lado a lado para comparações (ex: papéis de acesso e camadas de dados).
+- **Tom de Voz**: Técnico, profissional, acadêmico e com ênfase na responsabilidade social da engenharia de software aplicada ao terceiro setor.
 
 ---
 
