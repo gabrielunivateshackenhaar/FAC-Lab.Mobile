@@ -5,7 +5,7 @@ import { getDatabase } from './config/database';
 import { env } from './config/env';
 
 function bootstrap(): void {
-  const filesDirectory = path.resolve(__dirname, '../../', env.FILES_DIR);
+  const filesDirectory = path.resolve(__dirname, '../', env.FILES_DIR);
   if (!fs.existsSync(filesDirectory)) {
     fs.mkdirSync(filesDirectory, { recursive: true });
   }
