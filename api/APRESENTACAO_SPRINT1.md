@@ -36,9 +36,20 @@ Síntese executiva das decisões de arquitetura, estratégia de hospedagem, segu
   - **Refresh Token Seguro com Rotação**: Permite que o aplicativo mobile renove automaticamente a sessão em segundo plano, garantindo usabilidade contínua aos pais sem abrir mão da segurança.
   - **Revogação Instantânea**: Mecanismo que invalida sessões imediatamente em caso de logout ou detecção de anomalias.
 - **Controle de Acesso Baseado em Papéis (RBAC)**:
-  - **Administrador**: Gestão de colaboradores, aprovação formal de matrículas, controle de vagas e acesso a auditorias.
-  - **Colaborador (Educadores/Pedagogos)**: Consulta operacional de turmas, planejamento de oficinas e registro diário de presenças.
-  - **Responsável (Pais/Tutores)**: Acesso estritamente restrito aos seus próprios dependentes (solicitação de matrícula, rematrícula, upload de comprovantes e acompanhamento de agenda).
+  - **Administrador (Diretoria, Coordenação Pedagógica e Assistência Social)**:
+    - Gestão institucional: controle de acessos, cadastro de colaboradores e parametrização das 3 unidades físicas.
+    - Análise e homologação: conferência de documentos comprobatórios (renda, residência, certidões) e aprovação/rejeição formal de matrículas e rematrículas.
+    - Supervisão global: acesso irrestrito aos relatórios pedagógicos, histórico completo dos alunos e à trilha de auditoria para conformidade legal.
+  - **Colaborador (Educadores Sociais, Pedagogos e Oficineiros)**:
+    - Rotina pedagógica: visualização da lista de alunos matriculados em suas respectivas turmas e oficinas.
+    - Cuidados essenciais: acesso a alertas necessários ao cotidiano da oficina (problemas de saúde, alergias e restrições médicas da criança).
+    - Registro de frequência: lançamento diário de presenças, faltas e justificativas nas atividades do contraturno.
+    - Bloqueios de segurança: **não** visualiza dados financeiros/renda dos responsáveis, não aprova cadastros e não gerencia outros usuários.
+  - **Responsável (Pais e Tutores Legais)**:
+    - Auto-serviço no aplicativo: cadastro inicial no app mobile, atualização dos dados de contato familiar e vínculo com seus dependentes.
+    - Inscrição e documentação: solicitação digital de pré-inscrição de novos alunos, realização de rematrícula anual e upload de comprovantes (renda, residência, fotos e termos).
+    - Acompanhamento: consulta ao calendário institucional, oficinas e reuniões de pais da unidade do seu filho.
+    - Isolamento de privacidade: tem acesso **exclusivamente aos dados dos seus próprios filhos**, sendo terminantemente bloqueado pelo backend de enxergar qualquer informação de outras crianças ou responsáveis.
 - **Trilha de Auditoria Obrigatória**:
   - Registro sistemático e imutável de qualquer ação de criação, edição, exclusão ou visualização de dados sensíveis na tabela de auditoria, registrando o autor, o recurso afetado, o endereço IP e a data/hora exata do evento.
 - **Criptografia de Credenciais**:
