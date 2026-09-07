@@ -9,10 +9,9 @@ build/
 out/
 *.tsbuildinfo
 
-# Arquivos locais
-/files/
-api/files/*
-!api/files/.gitkeep
+# Arquivos locais (criados sob demanda)
+files/
+api/files/
 
 # Variáveis de ambiente e segredos
 .env
