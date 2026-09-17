@@ -23,6 +23,40 @@ function seedInitialData(db: Database.Database): void {
 
     console.log(`Usuario administrador inicial criado: ${env.ADMIN_DEFAULT_EMAIL}`);
   }
+
+  const unidadesPredefinidas = [
+    {
+      id: 'unidade-gloria',
+      nome: 'FAC Glória',
+      endereco: 'Rua Buarque de Macedo, nº 4180 - Bairro Glória - Garibaldi - RS',
+      telefone: '(54) 3462-2047'
+    },
+    {
+      id: 'unidade-sao-francisco',
+      nome: 'FAC São Francisco',
+      endereco: 'Rua Ipiranga, nº 60 - Bairro São Francisco - Garibaldi - RS',
+      telefone: '(54) 3462-6706'
+    },
+    {
+      id: 'unidade-sao-pedro',
+      nome: 'FAC São Pedro',
+      endereco: 'Rua João Goulart, s/nº - Bairro Glória - Garibaldi - RS',
+      telefone: '(54) 3462-2047'
+    }
+  ];
+
+  const stmtVerificaUnidade = db.prepare('SELECT id FROM unidades WHERE id = ?');
+  const stmtInsereUnidade = db.prepare(
+    `INSERT INTO unidades (id, nome, endereco, telefone)
+     VALUES (?, ?, ?, ?)`
+  );
+
+  for (const unidade of unidadesPredefinidas) {
+    const existe = stmtVerificaUnidade.get(unidade.id);
+    if (!existe) {
+      stmtInsereUnidade.run(unidade.id, unidade.nome, unidade.endereco, unidade.telefone);
+    }
+  }
 }
 
 function initializeDatabase(): Database.Database {

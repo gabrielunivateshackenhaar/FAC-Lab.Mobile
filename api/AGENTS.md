@@ -2,6 +2,8 @@
 
 Projeto de extensão universitária em Engenharia de Software voltado ao desenvolvimento do backend da **Plataforma de Gestão de Atendimentos, Matrículas e Agenda** para a instituição filantrópica **Fraterno Auxílio Cristão (FAC)** de Garibaldi - RS.
 
+Integrantes: [Vitor Walter, Gabriel Hackenhaar, João Agostini]
+
 ---
 
 ## 1. Contexto Institucional e Propósito

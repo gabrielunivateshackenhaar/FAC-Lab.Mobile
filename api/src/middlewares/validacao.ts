@@ -14,10 +14,22 @@ export function validarRequisicao(opcoes: ValidacaoOpcoes) {
         request.body = opcoes.body.parse(request.body);
       }
       if (opcoes.query) {
-        request.query = opcoes.query.parse(request.query) as typeof request.query;
+        const parsedQuery = opcoes.query.parse(request.query);
+        Object.defineProperty(request, 'query', {
+          value: parsedQuery,
+          writable: true,
+          configurable: true,
+          enumerable: true
+        });
       }
       if (opcoes.params) {
-        request.params = opcoes.params.parse(request.params) as typeof request.params;
+        const parsedParams = opcoes.params.parse(request.params);
+        Object.defineProperty(request, 'params', {
+          value: parsedParams,
+          writable: true,
+          configurable: true,
+          enumerable: true
+        });
       }
       next();
     } catch (error) {
