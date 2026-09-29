@@ -25,9 +25,9 @@ O **Fraterno Auxílio Cristão (FAC)** é uma entidade filantrópica fundada em 
 FAC-Lab.Mobile/
 ├── api/                       # Backend RESTful (Node.js, TypeScript, SQLite)
 │   ├── AGENTS.md              # Diretrizes técnicas detalhadas do backend
+│   ├── API_ROUTES.md          # Documentação completa dos contratos e rotas da API
 │   ├── contexto/              # Documentos originais de domínio, fichas e escopo
 │   └── database/              # DDL e esquemas do banco de dados (schema.sql)
-├── API_ROUTES.md              # Documentação completa dos contratos e rotas da API
 └── README.md                  # Visão geral do projeto e diretrizes globais
 ```
 
@@ -44,5 +44,5 @@ O módulo de backend é projetado com a premissa de **custo zero de infraestrutu
 - **Banco de Dados**: SQLite 3 (`better-sqlite3`) operando em modo WAL
 - **Validação de Contratos**: Zod
 
-Para consultar a especificação completa dos endpoints, contratos e permissões, veja [`API_ROUTES.md`](./API_ROUTES.md).
+Para consultar a especificação completa dos endpoints, contratos e permissões, veja [`api/API_ROUTES.md`](./api/API_ROUTES.md).
 Para orientações sobre a arquitetura em camadas, otimizações de banco de dados e padrões de desenvolvimento do backend, consulte [`api/AGENTS.md`](./api/AGENTS.md).
