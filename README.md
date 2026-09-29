@@ -46,3 +46,14 @@ O módulo de backend é projetado com a premissa de **custo zero de infraestrutu
 
 Para consultar a especificação completa dos endpoints, contratos e permissões, veja [`api/API_ROUTES.md`](./api/API_ROUTES.md).
 Para orientações sobre a arquitetura em camadas, otimizações de banco de dados e padrões de desenvolvimento do backend, consulte [`api/AGENTS.md`](./api/AGENTS.md).
+
+---
+
+## 5. Ambiente de Desenvolvimento e CD
+
+A API de desenvolvimento está implantada e sincronizada continuamente em servidor dedicado:
+
+- **Host**: Servidor Linux (`ssh vitor`) via Tailscale (`100.91.34.80`)
+- **Porta**: `3333`
+- **Healthcheck**: `GET http://100.91.34.80:3333/health`
+- **Deploy Contínuo**: Atualização automática a cada push na branch `main` com compilação e reload via PM2 (`fac-api-dev`).
