@@ -205,6 +205,14 @@ export class TurmasService {
       throw new NotFoundError('Turma nao encontrada');
     }
 
+    const stmtVerificaAluno = db.prepare('SELECT id FROM alunos WHERE id = ?');
+    for (const alunoId of alunoIds) {
+      const aluno = stmtVerificaAluno.get(alunoId);
+      if (!aluno) {
+        throw new NotFoundError(`Aluno nao encontrado: ${alunoId}`);
+      }
+    }
+
     const insertStmt = db.prepare(
       `INSERT OR IGNORE INTO turmas_alunos (turma_id, aluno_id)
        VALUES (?, ?)`

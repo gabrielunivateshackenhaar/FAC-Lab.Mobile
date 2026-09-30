@@ -7,7 +7,7 @@ export const tipoEventoEnum = z.enum([
   'EVENTO_GERAL'
 ]);
 
-export const criarEventoBodySchema = z.object({
+const eventoBaseSchema = z.object({
   unidadeId: z.string().min(1, 'Identificador da unidade obrigatorio'),
   turmaId: z.string().optional(),
   titulo: z.string().min(2, 'Titulo deve ter no minimo 2 caracteres'),
@@ -19,7 +19,26 @@ export const criarEventoBodySchema = z.object({
   regraRecorrencia: z.string().optional()
 });
 
-export const atualizarEventoBodySchema = criarEventoBodySchema.partial();
+export const criarEventoBodySchema = eventoBaseSchema.refine(
+  (data) => new Date(data.dataHoraFim) >= new Date(data.dataHoraInicio),
+  {
+    message: 'Data/Hora de fim deve ser posterior ou igual a data/hora de inicio',
+    path: ['dataHoraFim']
+  }
+);
+
+export const atualizarEventoBodySchema = eventoBaseSchema.partial().refine(
+  (data) => {
+    if (data.dataHoraInicio && data.dataHoraFim) {
+      return new Date(data.dataHoraFim) >= new Date(data.dataHoraInicio);
+    }
+    return true;
+  },
+  {
+    message: 'Data/Hora de fim deve ser posterior ou igual a data/hora de inicio',
+    path: ['dataHoraFim']
+  }
+);
 
 export const listarEventosQuerySchema = z.object({
   dataInicio: z.string().optional(),

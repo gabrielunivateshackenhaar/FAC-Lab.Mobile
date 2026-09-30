@@ -210,6 +210,10 @@ export class MatriculasService {
       throw new ConflictError('Matricula ja se encontra homologada');
     }
 
+    if (matricula.status === 'CANCELADA') {
+      throw new ConflictError('Matricula cancelada nao pode ser homologada');
+    }
+
     const transaction = db.transaction(() => {
       if (input.status === 'APROVADA') {
         db.prepare(

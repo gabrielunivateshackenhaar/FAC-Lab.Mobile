@@ -45,6 +45,14 @@ export class PresencasService {
       throw new NotFoundError('Evento de agenda nao encontrado');
     }
 
+    const stmtVerificaAluno = db.prepare('SELECT id FROM alunos WHERE id = ?');
+    for (const item of itens) {
+      const aluno = stmtVerificaAluno.get(item.alunoId);
+      if (!aluno) {
+        throw new NotFoundError(`Aluno nao encontrado: ${item.alunoId}`);
+      }
+    }
+
     const stmtUpsert = db.prepare(
       `INSERT INTO presencas (id, evento_agenda_id, aluno_id, presente, justificativa)
        VALUES (?, ?, ?, ?, ?)
