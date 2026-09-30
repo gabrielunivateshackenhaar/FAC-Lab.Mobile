@@ -56,4 +56,4 @@ A API de desenvolvimento está implantada e sincronizada continuamente em servid
 - **URL Pública (HTTPS)**: [`https://fac.vitorzw.win`](https://fac.vitorzw.win)
 - **Healthcheck Público**: `GET https://fac.vitorzw.win/health`
 - **Acesso Interno (Tailscale)**: `http://100.91.34.80:3333`
-- **Deploy Contínuo**: Atualização automática a cada push na branch `main` com compilação e reload via PM2 (`fac-api-dev`).
+- **Deploy Contínuo**: Atualização automática a cada push na branch `main` com verificação a cada 15 segundos e reload via PM2 (`fac-api-dev`).
