@@ -1,0 +1,32 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    ".gitattributes": true,
+    ".gitignore": true,
+    "README.md": true,
+    "**/node_modules": true,
+    "**/package.json": true,
+    "**/package-lock.json": true,
+    "**/tsconfig.json": true,
+    "**/.expo": true,
+    "**/expo-env.d.ts": true,
+    "**/.metro-health-check*": true,
+    "**/dist": true,
+    "**/web-build": true,
+    "**/.kotlin": true
+  },
+  "search.exclude": {
+    "**/.expo": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/web-build": true
+  },
+  "files.watcherExclude": {
+    "**/.expo/**": true
+  }
+}
