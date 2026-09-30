@@ -18,7 +18,8 @@
     "**/.metro-health-check*": true,
     "**/dist": true,
     "**/web-build": true,
-    "**/.kotlin": true
+    "**/.kotlin": true,
+    "**/LICENSE": true
   },
   "search.exclude": {
     "**/.expo": true,
