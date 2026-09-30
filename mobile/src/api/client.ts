@@ -1,6 +1,6 @@
 import { API_URL } from '../config/env';
-import { lerTokens, salvarTokens, limparTokens } from '../auth/armazenamento';
-import type { DetalheErro } from './tipos';
+import { lerTokens, salvarTokens, limparTokens } from '../storage/tokenStorage';
+import type { DetalheErro } from '../types';
 
 export class ErroApi extends Error {
   constructor(
@@ -20,11 +20,25 @@ interface Opcoes {
 }
 
 let renovacaoEmAndamento: Promise<boolean> | null = null;
+let callbackAoDeslogar: (() => void) | null = null;
+
+export function definirAoDeslogar(callback: (() => void) | null): void {
+  callbackAoDeslogar = callback;
+}
+
+function notificarDeslogar(): void {
+  if (callbackAoDeslogar) {
+    callbackAoDeslogar();
+  }
+}
 
 function renovarToken(): Promise<boolean> {
   renovacaoEmAndamento ??= (async () => {
     const { refreshToken } = await lerTokens();
-    if (!refreshToken) return false;
+    if (!refreshToken) {
+      notificarDeslogar();
+      return false;
+    }
 
     const resposta = await fetch(`${API_URL}/auth/refresh`, {
       method: 'POST',
@@ -34,6 +48,7 @@ function renovarToken(): Promise<boolean> {
 
     if (!resposta.ok) {
       await limparTokens();
+      notificarDeslogar();
       return false;
     }
 

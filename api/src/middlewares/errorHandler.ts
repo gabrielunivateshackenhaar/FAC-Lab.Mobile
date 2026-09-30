@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import multer from 'multer';
 import { ZodError } from 'zod';
 import { AppError, ErroDetalhe } from '../core/errors/AppError';
 
@@ -31,6 +32,27 @@ export function errorHandler(
     return;
   }
 
+  if (error instanceof multer.MulterError || (error as { name?: string }).name === 'MulterError') {
+    const multerError = error as multer.MulterError;
+    const isLimitFileSize = multerError.code === 'LIMIT_FILE_SIZE';
+
+    response.status(400).json({
+      codigo: 'DADOS_INVALIDOS',
+      mensagem: isLimitFileSize
+        ? 'Arquivo excede o tamanho maximo permitido de 10MB'
+        : (multerError.message || 'Erro no processamento do arquivo'),
+      detalhes: [
+        {
+          campo: multerError.field ?? 'arquivo',
+          mensagem: isLimitFileSize
+            ? 'Arquivo excede o tamanho maximo permitido de 10MB'
+            : multerError.message
+        }
+      ]
+    });
+    return;
+  }
+
   console.error('Erro inesperado:', error);
 
   response.status(500).json({
@@ -38,3 +60,4 @@ export function errorHandler(
     mensagem: 'Ocorreu um erro interno no servidor'
   });
 }
+

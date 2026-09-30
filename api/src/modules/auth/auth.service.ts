@@ -17,10 +17,17 @@ interface UsuarioBanco {
 }
 
 interface RespostaAutenticacao {
+  token: string;
   accessToken: string;
   refreshToken: string;
   expiraEm: string;
   usuario: UsuarioAutenticado;
+}
+
+interface RespostaRegistroResponsavel extends RespostaAutenticacao {
+  mensagem: string;
+  usuarioId: string;
+  responsavelId: string;
 }
 
 export class AuthService {
@@ -85,6 +92,7 @@ export class AuthService {
     });
 
     return {
+      token: tokens.accessToken,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       expiraEm: env.JWT_EXPIRES_IN,
@@ -92,7 +100,7 @@ export class AuthService {
     };
   }
 
-  public static renovarToken(tokenAtual: string, enderecoIp?: string): { accessToken: string; refreshToken: string; expiraEm: string } {
+  public static renovarToken(tokenAtual: string, enderecoIp?: string): { token: string; accessToken: string; refreshToken: string; expiraEm: string } {
     const db = getDatabase();
 
     const registro = db
@@ -146,13 +154,14 @@ export class AuthService {
     });
 
     return {
+      token: novosTokens.accessToken,
       accessToken: novosTokens.accessToken,
       refreshToken: novosTokens.refreshToken,
       expiraEm: env.JWT_EXPIRES_IN
     };
   }
 
-  public static registrarResponsavel(dados: RegistroResponsavelInput, enderecoIp?: string): RespostaAutenticacao {
+  public static registrarResponsavel(dados: RegistroResponsavelInput, enderecoIp?: string): RespostaRegistroResponsavel {
     const db = getDatabase();
 
     const usuarioExistente = db.prepare('SELECT id FROM usuarios WHERE email = ?').get(dados.email);
@@ -213,6 +222,10 @@ export class AuthService {
     });
 
     return {
+      mensagem: 'Responsavel registrado com sucesso',
+      usuarioId,
+      responsavelId,
+      token: tokens.accessToken,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       expiraEm: env.JWT_EXPIRES_IN,
