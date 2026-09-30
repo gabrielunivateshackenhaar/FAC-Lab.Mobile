@@ -51,9 +51,9 @@ Para orientações sobre a arquitetura em camadas, otimizações de banco de dad
 
 ## 5. Ambiente de Desenvolvimento e CD
 
-A API de desenvolvimento está implantada e sincronizada continuamente em servidor dedicado:
+A API de desenvolvimento está implantada e sincronizada continuamente em servidor dedicado (*self-hosted*):
 
-- **Host**: Servidor Linux (`ssh vitor`) via Tailscale (`100.91.34.80`)
-- **Porta**: `3333`
-- **Healthcheck**: `GET http://100.91.34.80:3333/health`
+- **URL Pública (HTTPS)**: [`https://fac.vitorzw.win`](https://fac.vitorzw.win)
+- **Healthcheck Público**: `GET https://fac.vitorzw.win/health`
+- **Acesso Interno (Tailscale)**: `http://100.91.34.80:3333`
 - **Deploy Contínuo**: Atualização automática a cada push na branch `main` com compilação e reload via PM2 (`fac-api-dev`).
